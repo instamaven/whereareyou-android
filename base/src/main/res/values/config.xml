@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="firebase_db_uri" translatable="false">https://whereareyou-8befa.firebaseio.com/</string>
+    <string name="deep_link_prefix" translatable="false">https://wlady.page.link</string>
+    <string name="invitation_deep_link" translatable="false">https://wlady.page.link/invitation/%s/%s</string>
+    <string name="google_maps_key" translatable="false">AIzaSyAX6VAuv19am3ObsqK3RrB4UdAzdC_FW8I</string>
+    <string name="google_apis_base_url" translatable="false">https://fcm.googleapis.com/</string>
+    <string name="google_storage_base_url" translatable="false">https://storage.googleapis.com/%1$s/%2$s</string>
+    <string name="default_notification_channel_id" translatable="false">where_are_you_channel</string>
+</resources>

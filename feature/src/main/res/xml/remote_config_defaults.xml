@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>max_contacts</key>
+        <value>5</value>
+    </entry>
+    <entry>
+        <key>contacts_expired</key>
+        <value>86400</value>
+    </entry>
+    <entry>
+        <key>fcm_access_token</key>
+        <value>AAAA0VIfbX4:APA91bEcnmgV3kzERvu3XrzSnoVQvZXN5IZMOKFqOJIKC6MnUzeK7O71KmxLYh5NnzhUHdl8E4LLrFd6qI_rKB_3kqDgQzVQuaQWe1Tr9JRuPUayuKOLhdt3HRVkxzoLAA-Jm2emh7qs</value>
+    </entry>
+    <entry>
+        <key>google_storage_bucket</key>
+        <value>whereareyou-8befa.appspot.com</value>
+    </entry>
+</defaultsMap>

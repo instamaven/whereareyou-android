@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "899025956222",
+    "firebase_url": "https://whereareyou-8befa.firebaseio.com",
+    "project_id": "whereareyou-8befa",
+    "storage_bucket": "whereareyou-8befa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899025956222:android:7bca7019b17da16a",
+        "android_client_info": {
+          "package_name": "com.wlady.app.whereareyou.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "899025956222-2o7kse00n2g2ohks6c0h3glihjioumpn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wlady.app.whereareyou.app",
+            "certificate_hash": "514a65e0d11e1042d617a4ac8eddf72c182e6a5b"
+          }
+        },
+        {
+          "client_id": "899025956222-kd3q6gm3tp2nf6pmviohs09hsu1fo72u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX6VAuv19am3ObsqK3RrB4UdAzdC_FW8I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899025956222-kd3q6gm3tp2nf6pmviohs09hsu1fo72u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

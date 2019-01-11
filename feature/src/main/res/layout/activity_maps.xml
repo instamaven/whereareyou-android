@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activities.MapsActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/infoPanel"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:id="@+id/tableRow"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            map:layout_constraintTop_toTopOf="parent">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/myInfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="1dp"
+                map:cardElevation="2dp">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/avatar1"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        map:layout_constraintBottom_toBottomOf="parent"
+                        map:layout_constraintStart_toStartOf="parent"
+                        map:layout_constraintTop_toTopOf="parent"
+                        map:roundAsCircle="true"
+                        map:roundingBorderPadding="4dp"
+                        map:roundingBorderWidth="2dp" />
+
+                    <TextView
+                        android:id="@+id/updated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:layout_marginStart="8dp"
+                        android:textSize="12sp"
+                        map:layout_constraintBottom_toTopOf="@+id/point"
+                        map:layout_constraintStart_toEndOf="@+id/avatar1"
+                        map:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:layout_marginStart="8dp"
+                        android:textSize="12sp"
+                        map:layout_constraintBottom_toTopOf="@+id/altitude"
+                        map:layout_constraintStart_toEndOf="@+id/avatar1"
+                        map:layout_constraintTop_toBottomOf="@+id/updated" />
+
+                    <TextView
+                        android:id="@+id/altitude"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:layout_marginStart="8dp"
+                        android:textSize="12sp"
+                        map:layout_constraintBottom_toTopOf="@+id/velocity"
+                        map:layout_constraintStart_toEndOf="@+id/avatar1"
+                        map:layout_constraintTop_toBottomOf="@+id/point" />
+
+                    <TextView
+                        android:id="@+id/velocity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:layout_marginStart="8dp"
+                        android:textSize="12sp"
+                        map:layout_constraintBottom_toBottomOf="parent"
+                        map:layout_constraintStart_toEndOf="@+id/avatar1"
+                        map:layout_constraintTop_toBottomOf="@+id/altitude" />
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="54dp"
+                        android:layout_marginTop="4dp"
+                        map:layout_constraintStart_toStartOf="parent"
+                        map:layout_constraintTop_toTopOf="parent"
+                        map:srcCompat="@mipmap/ic_map_marker" />
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            map:layout_constraintTop_toBottomOf="@+id/tableRow">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/fui_bgAnonymous"
+                tools:layout_editor_absoluteY="120dp">
+
+                <TextView
+                    android:id="@+id/distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    map:layout_constraintBottom_toBottomOf="parent"
+                    map:layout_constraintEnd_toEndOf="parent"
+                    map:layout_constraintStart_toStartOf="parent"
+                    map:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+        </TableRow>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        map:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toBottomOf="@id/infoPanel">
+
+
+    </fragment>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="1.0"
+        map:layout_constraintStart_toStartOf="parent">
+
+        <ToggleButton
+            android:id="@+id/zoomButton"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/btn_rounded"
+            android:backgroundTint="@color/common_google_signin_btn_text_light_disabled"
+            android:drawableLeft="@drawable/ic_center_focus_strong_black_24dp"
+            android:drawableTint="@android:color/black"
+            android:padding="8dp"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
+            android:textOff="@string/off"
+            android:textOn="@string/on"
+            android:textSize="12sp"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toTopOf="parent"
+            map:layout_constraintVertical_bias="0.0" />
+
+        <ToggleButton
+            android:id="@+id/soundButton"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/btn_rounded"
+            android:backgroundTint="@color/common_google_signin_btn_text_light_disabled"
+            android:drawableLeft="@drawable/ic_volume_off_black_24dp"
+            android:drawableTint="@android:color/black"
+            android:padding="8dp"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
+            android:textOff="@string/off"
+            android:textOn="@string/on"
+            android:textSize="12sp"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintStart_toEndOf="@+id/zoomButton"
+            map:layout_constraintTop_toTopOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/compasButton"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/btn_rounded"
+            android:backgroundTint="@color/common_google_signin_btn_text_light_disabled"
+            android:drawableLeft="@drawable/ic_location_disabled_black_24dp"
+            android:drawableTint="@android:color/black"
+            android:padding="8dp"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
+            android:textOff="@string/off"
+            android:textOn="@string/on"
+            android:textSize="12sp"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintStart_toEndOf="@+id/soundButton"
+            map:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/pingBtn"
+            android:layout_width="80dp"
+            android:layout_height="32dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/btn_rounded"
+            android:drawableLeft="@drawable/ic_wifi_black_24dp"
+            android:drawableTint="@android:color/white"
+            android:padding="8dp"
+            android:scaleType="fitStart"
+            android:text="@string/ping"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintTop_toTopOf="parent"
+            map:layout_constraintVertical_bias="1.0"
+            tools:src="@drawable/ic_wifi_black_24dp" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
