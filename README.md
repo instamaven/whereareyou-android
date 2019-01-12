@@ -20,4 +20,6 @@ No server code. Google Firebase backend.
 
 ![Firebase Database Page](screenshot-7.jpg)
 
+![Firebase Storage Page](screenshot-9.jpg)
+
 ![Firebase Remote Config Page](screenshot-8.jpg)
