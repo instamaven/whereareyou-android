@@ -1,6 +1,6 @@
 ## Where Are You? ##
 
-Simple Android application to connect friends and to watch their positions at Google Map in real time.
+Simple Android application to connect friends and to watch their location at Google Map in real time.
 
 No server code. Google Firebase backend.
 

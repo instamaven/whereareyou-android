@@ -59,8 +59,8 @@
     <string name="action_radar">Показать на карте</string>
     <string name="title_activity_maps">Показать на карте</string>
     <string name="distance">Расстояние: неизвестно</string>
-    <string name="distance_m">Расстояние: %.1f m</string>
-    <string name="distance_km">Расстояние: %.2f km</string>
+    <string name="distance_m">Расстояние по прямой: %.1f m</string>
+    <string name="distance_km">Расстояние по прямой: %.2f km</string>
     <string name="unknown">неизвестно</string>
     <string name="search">поиск</string>
     <string name="ping">Поиск</string>

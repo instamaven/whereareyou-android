@@ -16,4 +16,12 @@
         <key>google_storage_bucket</key>
         <value>whereareyou-8befa.appspot.com</value>
     </entry>
+    <entry>
+        <key>route_machine_url</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>route_machine_token</key>
+        <value></value>
+    </entry>
 </defaultsMap>

@@ -23,7 +23,7 @@ public class FCMPushClient {
                 .setType(FCMPushNotification.INVITE_MESSAGE)
                 .setFrom(App.user);
 
-        Call<FCMResponse> fcmResponseCall = App.retrofit
+        Call<FCMResponse> fcmResponseCall = App.firebaseClient
                 .create(FCMPushService.class)
                 .sendMessage(fcmNotification);
 
@@ -46,7 +46,7 @@ public class FCMPushClient {
                 .setType(FCMPushNotification.CONFIRMED_MESSAGE)
                 .setFrom(App.user);
 
-        Call<FCMResponse> fcmResponseCall = App.retrofit
+        Call<FCMResponse> fcmResponseCall = App.firebaseClient
                 .create(FCMPushService.class)
                 .sendMessage(fcmNotification);
 
@@ -70,7 +70,7 @@ public class FCMPushClient {
                 .setBody(context.getString(R.string.accepted_body, App.currentUser.getDisplayName()))
                 .setType(FCMPushNotification.ACCEPTED_MESSAGE);
 
-        Call<FCMResponse> fcmResponseCall = App.retrofit
+        Call<FCMResponse> fcmResponseCall = App.firebaseClient
                 .create(FCMPushService.class)
                 .sendMessage(fcmNotification);
 
@@ -92,7 +92,7 @@ public class FCMPushClient {
                 .setTo(token)
                 .setType(FCMPushNotification.PING_MESSAGE);
 
-        Call<FCMResponse> fcmResponseCall = App.retrofit
+        Call<FCMResponse> fcmResponseCall = App.firebaseClient
                 .create(FCMPushService.class)
                 .sendMessage(fcmNotification);
 

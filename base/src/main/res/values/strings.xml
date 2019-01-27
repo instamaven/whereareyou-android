@@ -67,8 +67,8 @@
     <string name="action_radar">Show on Map</string>
     <string name="title_activity_maps">Show on Map</string>
     <string name="distance">Distance: unknown</string>
-    <string name="distance_m">Distance: %.1f m</string>
-    <string name="distance_km">Distance: %.2f km</string>
+    <string name="distance_m">Direct distance: %.1f m</string>
+    <string name="distance_km">Direct distance: %.2f km</string>
     <string name="unknown">unknown</string>
     <string name="search">search</string>
     <string name="ping">Ping</string>
@@ -92,12 +92,10 @@
     <string name="updateBtn">Update</string>
 
     <string-array name="languages_array">
-        <item>Русский</item>
         <item>English</item>
     </string-array>
 
     <string-array name="languages_keys">
-        <item>ru</item>
         <item>en</item>
     </string-array>
 

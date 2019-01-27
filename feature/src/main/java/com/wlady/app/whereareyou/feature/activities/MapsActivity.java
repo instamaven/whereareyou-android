@@ -28,10 +28,10 @@ import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -39,10 +39,16 @@ import com.wlady.app.whereareyou.feature.App;
 import com.wlady.app.whereareyou.feature.R;
 import com.wlady.app.whereareyou.feature.helpers.FCMPushClient;
 import com.wlady.app.whereareyou.feature.helpers.FirestoreHelper;
+import com.wlady.app.whereareyou.feature.helpers.RouteMachineClient;
 import com.wlady.app.whereareyou.feature.models.IUserModel;
 import com.wlady.app.whereareyou.feature.models.UserModel;
 
 import org.ocpsoft.prettytime.PrettyTime;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.wlady.app.whereareyou.feature.helpers.Utility.decodePolyline;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, OnCameraIdleListener {
 
@@ -54,11 +60,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static UserModel userModel;
 
     private TextView updatedText, pointText, altText, velText, distanceText;
-    private Button pingBtn, zoomBtn, soundBtn, compassBtn;
+    private Button pingBtn, zoomBtn, soundBtn, compassBtn, carBtn, bikeBtn, footBtn;
     private SimpleDraweeView avatar;
     private boolean alreadyDrawAvatar = false;
     private boolean firstDraw = true;
     private boolean autoZoom = false, soundEnabled = false, compassEnabled = false;
+    private boolean carRoute = false, bikeRoute = false, footRoute = false;
+    private static List<LatLng> carRouteEncoded = new LinkedList<>();
+    private static List<LatLng> bikeRouteEncoded = new LinkedList<>();
+    private static List<LatLng> footRouteEncoded = new LinkedList<>();
 
     private LocationCallback mLocationCallback;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -99,6 +109,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (Location location : locationResult.getLocations()) {
                     App.saveCurrentLocation(location);
                     drawMarkers();
+                    drawRoutes();
                 }
             }
         };
@@ -175,6 +186,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             drawMarkers();
         });
 
+        // car button
+        carBtn = findViewById(R.id.carBtn);
+        drawButtonStateColor(carBtn, carRoute, R.color.light_green);
+        carBtn.setOnClickListener(v -> {
+            carRoute = !carRoute;
+            drawButtonStateColor(carBtn, carRoute, R.color.light_green);
+            drawRoutes();
+        });
+
+        // bike button
+        bikeBtn = findViewById(R.id.bikeBtn);
+        drawButtonStateColor(bikeBtn, bikeRoute, R.color.magenta);
+        bikeBtn.setOnClickListener(v -> {
+            bikeRoute = !bikeRoute;
+            drawButtonStateColor(bikeBtn, bikeRoute, R.color.magenta);
+            drawRoutes();
+        });
+
+        // walk button
+        footBtn = findViewById(R.id.footBtn);
+        drawButtonStateColor(footBtn, footRoute, R.color.blue);
+        footBtn.setOnClickListener(v -> {
+            footRoute = !footRoute;
+            drawButtonStateColor(footBtn, footRoute, R.color.blue);
+            drawRoutes();
+        });
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -186,6 +224,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         prepareSound();
+    }
+
+    private void drawRoutes() {
+        if (bikeRoute) {
+            RouteMachineClient.getRoute(myLocation, searchLocation, "bike");
+        } else {
+            bikeRouteEncoded.clear();
+            drawMarkers();
+        }
+        if (carRoute) {
+            RouteMachineClient.getRoute(myLocation, searchLocation, "car");
+        } else {
+            carRouteEncoded.clear();
+            drawMarkers();
+        }
+        if (footRoute) {
+            RouteMachineClient.getRoute(myLocation, searchLocation, "foot");
+        } else {
+            footRouteEncoded.clear();
+            drawMarkers();
+        }
     }
 
     /**
@@ -205,6 +264,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.disabled_btn, null)));
             btn.setCompoundDrawablesWithIntrinsicBounds(stateOff, null, null, null);
+            btn.setCompoundDrawableTintList(ColorStateList.valueOf(Color.BLACK));
+            btn.setTextColor(Color.BLACK);
+        }
+    }
+
+    /**
+     * Set background color according to toggle button state
+     *
+     * @param btn            Button
+     * @param state          Toggle state
+     * @param backgroundTint Background tint color
+     */
+    private void drawButtonStateColor(Button btn, boolean state, int backgroundTint) {
+        if (state) {
+            btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(backgroundTint, null)));
+            btn.setCompoundDrawableTintList(ColorStateList.valueOf(Color.WHITE));
+            btn.setTextColor(Color.WHITE);
+        } else {
+            btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white, null)));
             btn.setCompoundDrawableTintList(ColorStateList.valueOf(Color.BLACK));
             btn.setTextColor(Color.BLACK);
         }
@@ -333,6 +411,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             drawInfoPanel(App.user);
         } else if (userModel != null) {
             searchLocation = drawIcon(userModel, BitmapDescriptorFactory.HUE_RED, R.mipmap.ic_map_marker, 0);
+            if (carRoute && carRouteEncoded.size() > 1) {
+                drawRoute(Color.GREEN, carRouteEncoded);
+            }
+            if (bikeRoute && bikeRouteEncoded.size() > 1) {
+                drawRoute(Color.MAGENTA, bikeRouteEncoded);
+            }
+            if (footRoute && footRouteEncoded.size() > 1) {
+                drawRoute(Color.BLUE, footRouteEncoded);
+            }
             drawInfoPanel(userModel);
             if (firstDraw || autoZoom) {
                 firstDraw = false;
@@ -445,6 +532,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    private void drawRoute(int color, List<LatLng> points) {
+        PolylineOptions lineOptions = new PolylineOptions();
+        lineOptions.addAll(points);
+        lineOptions.width(12);
+        lineOptions.color(color);
+        lineOptions.geodesic(true);
+        mMap.addPolyline(lineOptions);
+    }
+
     @Override
     public void onCameraIdle() {
         drawMarkers();
@@ -457,6 +553,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 case App.PING_MESSAGE:
                     FCMPushClient.sendPing(getApplicationContext(), userModel.getDevice().getToken());
                     break;
+                case App.DRAW_CAR_ROUTE:
+                case App.DRAW_BIKE_ROUTE:
+                case App.DRAW_FOOT_ROUTE:
+                    drawMarkers();
+                    break;
             }
         }
     }
@@ -467,6 +568,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (userModel != null) {
                 mHandler.sendEmptyMessage(App.PING_MESSAGE);
             }
+        }
+    }
+
+    public static class ThreadDrawRoute extends Thread {
+        int mode = 0;
+
+        public ThreadDrawRoute(String vehicle, String routeEncoded) {
+            switch (vehicle) {
+                case "car":
+                    carRouteEncoded.clear();
+                    carRouteEncoded = decodePolyline(routeEncoded);
+                    mode = App.DRAW_CAR_ROUTE;
+                    break;
+                case "bike":
+                    bikeRouteEncoded.clear();
+                    bikeRouteEncoded = decodePolyline(routeEncoded);
+                    mode = App.DRAW_BIKE_ROUTE;
+                    break;
+                case "foot":
+                    footRouteEncoded.clear();
+                    footRouteEncoded = decodePolyline(routeEncoded);
+                    mode = App.DRAW_FOOT_ROUTE;
+                    break;
+            }
+        }
+
+        @Override
+        public void run() {
+            mHandler.sendEmptyMessage(mode);
         }
     }
 

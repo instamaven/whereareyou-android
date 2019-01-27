@@ -33,6 +33,9 @@ public class App extends Application {
     final public static int UPDATE_BLACKLIST = 4;
     final public static int SHOW_CODE_MESSAGE = 5;
     final public static int PING_MESSAGE = 6;
+    final public static int DRAW_CAR_ROUTE = 7;
+    final public static int DRAW_BIKE_ROUTE = 8;
+    final public static int DRAW_FOOT_ROUTE = 9;
 
     final public static int LOCATION_REQUEST_INTERVAL = 10000;
     final public static int LOCATION_REQUEST_FASTEST_INTERVAL = 5000;
@@ -51,6 +54,8 @@ public class App extends Application {
     final private static String REMOTE_CONTACTS_EXPIRED = "contacts_expired";
     final private static String REMOTE_FCM_ACCESS_TOKEN = "fcm_access_token";
     final private static String REMOTE_GOOGLE_STORAGE_BUCKET = "google_storage_bucket";
+    final private static String ROUTE_MACHINE_URL = "route_machine_url";
+    final private static String ROUTE_MACHINE_TOKEN = "route_machine_token";
 
     public static String language;
     public static Locale locale;
@@ -58,7 +63,7 @@ public class App extends Application {
     public static DeviceModel device;
     public static UserModel user;
     public static Location currentLocation;
-    public static Retrofit retrofit;
+    public static Retrofit firebaseClient, routeMachineClient;
     public static LocationRequest mLocationRequest;
 
     public static Boolean canManageLocations = false;
@@ -66,6 +71,8 @@ public class App extends Application {
     public static long contacts_expired = 86400; // 24 hours in seconds
     public static String fcm_access_token = ""; // FCM access token
     public static String google_storage_bucket = ""; // FCM access token
+    public static String route_machine_url = "";
+    public static String route_machine_token = "";
 
     public static LocaleManager localeManager;
 
@@ -75,8 +82,8 @@ public class App extends Application {
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         device = new DeviceModel(true);
-        retrofit = new Retrofit.Builder()
-                .client(getOkHttpClient())
+        firebaseClient = new Retrofit.Builder()
+                .client(firebaseOkHttpClient())
                 .baseUrl(getString(R.string.google_apis_base_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -98,13 +105,35 @@ public class App extends Application {
         localeManager.setLocale(this);
     }
 
-    private static OkHttpClient getOkHttpClient() {
+    public static void initRouteMachineClient() {
+        if (!route_machine_url.isEmpty() && !route_machine_token.isEmpty()) {
+            routeMachineClient = new Retrofit.Builder()
+                    .client(routeMachineOkHttpClient())
+                    .baseUrl(route_machine_url)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+    }
+
+    private static OkHttpClient firebaseOkHttpClient() {
         // legacy FCM method to send push notifications
         return new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request newRequest = chain.request().newBuilder()
                             .addHeader("Content-Type", "application/json")
                             .addHeader("Authorization", "key=" + fcm_access_token)
+                            .build();
+                    return chain.proceed(newRequest);
+                })
+                .build();
+    }
+
+    private static OkHttpClient routeMachineOkHttpClient() {
+        return new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    Request newRequest = chain.request().newBuilder()
+                            .addHeader("Accept", "application/json")
+                            .addHeader("Authorization", "key=" + route_machine_token)
                             .build();
                     return chain.proceed(newRequest);
                 })
@@ -137,6 +166,10 @@ public class App extends Application {
         App.contacts_expired = remoteConfig.getLong(REMOTE_CONTACTS_EXPIRED);
         App.fcm_access_token = remoteConfig.getString(REMOTE_FCM_ACCESS_TOKEN);
         App.google_storage_bucket = remoteConfig.getString(REMOTE_GOOGLE_STORAGE_BUCKET);
+        App.route_machine_url = remoteConfig.getString(ROUTE_MACHINE_URL);
+        App.route_machine_token = remoteConfig.getString(ROUTE_MACHINE_TOKEN);
+        // init when correct settings have been configured
+        initRouteMachineClient();
     }
 
     public static void saveCurrentLocation(Location location) {
